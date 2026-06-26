@@ -13,6 +13,32 @@ date_default_timezone_set('Asia/Jakarta');
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
+// ============================================================
+// Konfigurasi Session
+// ============================================================
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_samesite', 'Lax');
+ini_set('session.gc_maxlifetime', 7200); // 120 menit
+
+session_set_cookie_params([
+    'lifetime' => 0,
+    'httponly' => true,
+    'samesite' => 'Lax',
+    'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on'
+]);
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Cek timeout (120 menit idle)
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 7200)) {
+    session_unset();
+    session_destroy();
+    session_start();
+}
+$_SESSION['last_activity'] = time();
+
 // Definisi path dasar
 define('BASE_PATH', dirname(__DIR__));          // root proyek (kedai-kopi/)
 define('APP_PATH', BASE_PATH . '/app');

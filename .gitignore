@@ -1,0 +1,6 @@
+/vendor/
+/config/database.php
+/config/rajaongkir.php
+/public/assets/uploads/**
+!/public/assets/uploads/
+!/public/assets/uploads/**/.gitkeep

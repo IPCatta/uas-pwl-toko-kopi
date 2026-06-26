@@ -72,4 +72,48 @@ class AuthController extends Controller
             $this->redirect('/register');
         }
     }
+
+    public function formLogin()
+    {
+        $data = [
+            'title' => 'Login',
+            'csrf_token' => CsrfHelper::generateToken()
+        ];
+        $this->view('auth/login', $data);
+    }
+
+    public function login()
+    {
+        if (!CsrfHelper::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->setFlash('error', 'Token keamanan tidak valid.');
+            $this->redirect('/login');
+        }
+
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if (empty($email) || empty($password)) {
+            $this->setFlash('error', 'Email dan password wajib diisi.');
+            $this->redirect('/login');
+        }
+
+        $user = $this->userModel->findByEmail($email);
+        
+        if ($user && password_verify($password, $user['password'])) {
+            session_regenerate_id(true);
+
+            $_SESSION['auth_user_id'] = $user['id'];
+            $_SESSION['auth_role'] = $user['role'];
+            $_SESSION['last_activity'] = time();
+
+            if ($user['role'] === 'admin') {
+                $this->redirect('/admin');
+            } else {
+                $this->redirect('/');
+            }
+        } else {
+            $this->setFlash('error', 'Email atau password salah.');
+            $this->redirect('/login');
+        }
+    }
 }

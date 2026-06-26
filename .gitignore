@@ -1,0 +1,20 @@
+# Dependency (di-install via composer)
+/vendor/
+
+# Konfigurasi berisi rahasia (kredensial DB & API key)
+/config/database.php
+/config/rajaongkir.php
+
+# File upload (data, bukan kode) — pertahankan folder, abaikan isi
+/public/assets/uploads/**
+!/public/assets/uploads/
+!/public/assets/uploads/**/.gitkeep
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Log & cache
+*.log

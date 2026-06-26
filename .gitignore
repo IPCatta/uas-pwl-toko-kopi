@@ -8,6 +8,7 @@
 # File upload (data, bukan kode) — pertahankan folder, abaikan isi
 /public/assets/uploads/**
 !/public/assets/uploads/
+!/public/assets/uploads/**/
 !/public/assets/uploads/**/.gitkeep
 
 # IDE & OS

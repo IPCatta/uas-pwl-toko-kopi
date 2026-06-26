@@ -29,4 +29,12 @@ class UserModel extends Model
         $stmt->bind_param("ssss", $data['nama'], $data['email'], $data['password'], $role);
         return $stmt->execute();
     }
+
+    public function updateFoto(int $userId, string $foto, string $fotoThumb): bool
+    {
+        $db = $this->getDb();
+        $stmt = $db->prepare("UPDATE users SET foto = ?, foto_thumb = ? WHERE id = ?");
+        $stmt->bind_param("ssi", $foto, $fotoThumb, $userId);
+        return $stmt->execute();
+    }
 }

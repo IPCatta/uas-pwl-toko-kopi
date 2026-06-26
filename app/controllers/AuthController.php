@@ -137,4 +137,46 @@ class AuthController extends Controller
         $this->setFlash('success', 'Anda telah berhasil logout.');
         $this->redirect('/login');
     }
+
+    public function profil()
+    {
+        $this->requireLogin();
+        $user = $this->userModel->findById($_SESSION['auth_user_id']);
+        
+        $this->view('akun/profil', [
+            'title' => 'Profil Akun',
+            'user' => $user,
+            'csrf_token' => CsrfHelper::generateToken()
+        ]);
+    }
+
+    public function uploadFoto()
+    {
+        $this->requireLogin();
+        
+        if (!CsrfHelper::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->setFlash('error', 'Token keamanan tidak valid.');
+            $this->redirect('/akun/profil');
+        }
+
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+            require_once APP_PATH . '/helpers/UploadHelper.php';
+            $uploadResult = UploadHelper::uploadProfilePhoto($_FILES['foto']);
+
+            if ($uploadResult) {
+                $this->userModel->updateFoto(
+                    $_SESSION['auth_user_id'], 
+                    $uploadResult['asli'], 
+                    $uploadResult['thumb']
+                );
+                $this->setFlash('success', 'Foto profil berhasil diperbarui.');
+            } else {
+                $this->setFlash('error', 'Gagal mengunggah foto.');
+            }
+        } else {
+            $this->setFlash('error', 'Silakan pilih foto terlebih dahulu.');
+        }
+
+        $this->redirect('/akun/profil');
+    }
 }

@@ -116,4 +116,25 @@ class AuthController extends Controller
             $this->redirect('/login');
         }
     }
+
+    public function logout()
+    {
+        if (!CsrfHelper::verifyToken($_POST['csrf_token'] ?? '')) {
+            $this->setFlash('error', 'Aksi tidak diizinkan.');
+            $this->redirect('/');
+        }
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        session_unset();
+        session_destroy();
+        
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $this->setFlash('success', 'Anda telah berhasil logout.');
+        $this->redirect('/login');
+    }
 }

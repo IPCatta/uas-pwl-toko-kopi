@@ -94,10 +94,12 @@ $router->post('/admin/kategori/{id}/update', 'KategoriController@update');
 $router->post('/admin/kategori/{id}/delete', 'KategoriController@destroy');
 
 // --- Admin: Produk ---
-$router->get('/admin/produk', 'ProdukController@index');
-$router->post('/admin/produk', 'ProdukController@store');
-$router->post('/admin/produk/{id}/update', 'ProdukController@update');
-$router->post('/admin/produk/{id}/delete', 'ProdukController@destroy');
+$router->get('/admin/produk',           'ProdukController@index');
+$router->get('/admin/produk/tambah',    'ProdukController@formTambah');
+$router->get('/admin/produk/{id}/edit', 'ProdukController@formEdit');
+$router->post('/admin/produk',               'ProdukController@store');
+$router->post('/admin/produk/{id}/update',   'ProdukController@update');
+$router->post('/admin/produk/{id}/delete',   'ProdukController@destroy');
 
 // --- Admin: Transaksi ---
 $router->get('/admin/transaksi', 'TransaksiController@index');

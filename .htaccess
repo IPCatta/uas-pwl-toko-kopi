@@ -1,8 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    # Redirect semua request ke public/index.php (front controller)
-    # Kecuali file/folder yang benar-benar ada di public/
-    RewriteCond %{REQUEST_URI} !^/kedai-kopi/public/
-    RewriteRule ^(.*)$ public/index.php [L,QSA]
-</IfModule>
